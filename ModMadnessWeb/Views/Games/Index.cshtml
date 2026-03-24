@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ModMadnessDomain.Domain.Game>
+
+@{
+    ViewData["Title"] = "Games Library";
+}
+
+<div class="card shadow-sm mb-5 border-0 bg-light">
+    <div class="card-body p-4">
+        <h4 class="mb-3"><i class="bi bi-cloud-download text-primary"></i> Import Game from RAWG</h4>
+        <form asp-action="Import" method="post" class="row g-3">
+            <div class="col-md-9">
+                <input type="text" name="searchTitle" class="form-control form-control-lg" placeholder="Enter game title (e.g. Elden Ring, Cyberpunk 2077...)" required />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-search"></i> Import
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<div class="d-flex justify-content-between align-items-center my-4">
+    <h2 class="fw-bold text-uppercase">Your Library</h2>
+    <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+        <i class="bi bi-plus-circle"></i> Add Manual
+    </a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow border-0 overflow-hidden transition-card">
+                <div class="position-relative">
+                    <img src="@(string.IsNullOrEmpty(item.Image) ? "https://via.placeholder.com/400x225?text=No+Image" : item.Image)"
+                         class="card-img-top" alt="@item.Title" style="height: 220px; object-fit: cover;">
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-dark opacity-75">@item.Type</span>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark">@item.Title</h5>
+                    <p class="card-text text-muted small text-truncate-2" style="min-height: 3rem;">
+                        @item.Description
+                    </p>
+                    <p class="mb-0 small"><strong>Author:</strong> @item.Author</p>
+                </div>
+
+                <div class="card-footer bg-white border-top-0 pb-4 px-3">
+                    <div class="d-grid gap-2">
+                        <div class="btn-group w-100 shadow-sm">
+                            <button type="button" class="btn btn-primary dropdown-toggle fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear-wide-connected"></i> Manage Content
+                            </button>
+                            <ul class="dropdown-menu shadow w-100">
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="Mods" asp-action="Index" asp-route-gameId="@item.Id">
+                                        <i class="bi bi-cpu text-primary"></i> <span class="ms-2">View Mods</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="DLCs" asp-action="Index" asp-route-gameId="@item.Id">
+                                        <i class="bi bi-box-seam text-success"></i> <span class="ms-2">DLCs & Add-ons</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" asp-controller="GameVersions" asp-action="Index" asp-route-gameId="@item.Id">
+                                        <i class="bi bi-git text-info"></i> <span class="ms-2">Game Versions</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info w-100 fw-bold shadow-sm">
+                                    <i class="bi bi-eye"></i> <small class="d-block">Info</small>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning w-100 fw-bold shadow-sm">
+                                    <i class="bi bi-pencil"></i> <small class="d-block">Edit</small>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger w-100 fw-bold shadow-sm">
+                                    <i class="bi bi-trash"></i> <small class="d-block">Delete</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <style>
+        .transition-card { transition: transform 0.2s; }
+        .transition-card:hover { transform: translateY(-5px); }
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+}

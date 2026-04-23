@@ -130,3 +130,55 @@ Key integration points:
 | `POST` | `/GameVersions/Edit/{id}` | Submit version edit |
 | `GET` | `/GameVersions/Delete/{id}` | Delete confirmation |
 | `POST` | `/GameVersions/Delete/{id}` | Confirm delete |
+
+# 
+
+### Setup Instructions
+
+#### Prerequisites
+
+- .NET 8 SDK
+- SQL Server (LocalDB or full instance)
+- RAWG API key — get one free at rawg.io/apidocs
+- Visual Studio 2022+ or VS Code
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/ivonajanevska/ModMadness.git
+cd ModMadness
+```
+
+### 2. Configure the database
+ 
+In `ModMadnessWeb/appsettings.json`:
+ 
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ModMadnessDb;Trusted_Connection=True;"
+}
+```
+ 
+### 3. Configure the RAWG API key
+ 
+```json
+"ExternalApis": {
+  "Rawg": {
+    "BaseUrl": "https://api.rawg.io/api/",
+    "ApiKey": "YOUR_RAWG_API_KEY"
+  }
+}
+```
+ 
+### 4. Apply migrations
+ 
+Using the Package Manager Console:
+```
+Update-Database
+```
+
+### 5. Run the application
+ 
+```bash
+dotnet run --project ModMadnessWeb
+```
